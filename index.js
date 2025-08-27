@@ -1,10 +1,4 @@
-
-
-
-
-
-
-    const NASA_API_BASE_URL = 'https://api.nasa.gov/planetary/apod';
+const NASA_API_BASE_URL = 'https://api.nasa.gov/planetary/apod';
 
 let apiKey = 'yd3wQF3gvqPWM6PeUQuwUqn80cFKYfU4sFqMbHgG';
 
@@ -26,11 +20,6 @@ function formatDate(date) {
 async function fetchAPOD(date) {
     const dateString = formatDate(currentDate);
     const url = `${NASA_API_BASE_URL}?api_key=${apiKey}&date=${dateString}`;
-    
-
-
-    
-    
 
     try {
         const response = await fetch(url);
@@ -46,21 +35,21 @@ async function fetchAPOD(date) {
                 throw new Error(`Failed to fetch data: ${response.status}`);
             }
         }
-    
 
-        
         const data = await response.json();
         console.log(data)
         photoElement.src = data.url;
         currentDateElement.textContent = dateString;
-          about.textContent=data.explanation;
-          title_image.textContent=data.title;
-          
-        
-      
-       
+        about.textContent = data.explanation;
+        title_image.textContent = data.title;
 
-        
+        // Hide next button if displayed date is today, show otherwise
+        if (formatDate(new Date()) === dateString) {
+            nextBtn.style.display = "none";
+        } else {
+            nextBtn.style.display = "block";
+        }
+
         return data;
     } catch (error) {
         if (error.message.includes('Failed to fetch')) {
@@ -77,13 +66,10 @@ function nextDate(){
         currentDate = newDate;
         photoElement.src = "1476.gif";
     
-
-        
     fetchAPOD();
 }
 
 function prevDate(){
-    
     const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() - 1);
     currentDate = newDate;
